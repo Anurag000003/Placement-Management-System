@@ -1,0 +1,30 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Installing security scanning tool...
+      - pip3 install pip-audit
+      - echo Running dependency vulnerability scan...
+      - pip-audit -r backend/requirements.txt
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 179923445087.dkr.ecr.ap-southeast-2.amazonaws.com
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building Docker image...
+      - docker build -t college-placement-backend ./backend
+      - docker tag college-placement-backend:latest 179923445087.dkr.ecr.ap-southeast-2.amazonaws.com/college-placement-backend:latest
+      - echo Uploading frontend to S3...
+      - aws s3 sync frontend s3://college-placement-frontend-179923445087 --delete
+
+  post_build:
+    commands:
+      - echo Security scan completed successfully.
+      - echo Pushing Docker image to Amazon ECR...
+      - docker push 179923445087.dkr.ecr.ap-southeast-2.amazonaws.com/college-placement-backend:latest
+      - echo Docker image pushed successfully.
+      - echo Deploying to EC2...
+      - aws ssm send-command --region ap-southeast-2 --instance-ids i-071906be57b94e2f8 --document-name "AWS-RunShellScript" --parameters 'commands=["/home/ec2-user/deploy-backend.sh"]'
+      - echo Deployment command sent to EC2.
