@@ -1,49 +1,38 @@
 # Placement Management System
 
-![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=flat&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.1-000000?style=flat&logo=flask&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat&logo=mysql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat&logo=docker&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-ECR%20%7C%20EC2%20%7C%20S3%20%7C%20CodeBuild-FF9900?style=flat&logo=amazonwebservices&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17%20%7C%2021-ED8B00?style=flat&logo=openjdk&logoColor=white)
+![Java Swing](https://img.shields.io/badge/GUI-Java%20Swing%20%2F%20AWT-5382A1?style=flat&logo=java&logoColor=white)
+![MySQL](https://img.shields.io/badge/Database-MySQL%208.0-4479A1?style=flat&logo=mysql&logoColor=white)
+![JDBC](https://img.shields.io/badge/Driver-JDBC%20Connector%2FJ-007396?style=flat&logo=oracle&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Cross--Platform%20Desktop-lightgrey?style=flat)
 
-A full-stack, enterprise-grade College Placement Management System (CPMS) engineered to streamline university recruitment drives, student career registrations, job postings, eligibility verifications, application pipelines, and interview scheduling. Fully containerized with Docker and powered by an automated AWS CI/CD pipeline using AWS CodeBuild, Amazon ECR, Amazon S3, and Amazon EC2.
+An enterprise-grade College Placement Management System (CPMS) engineered as a Java Desktop Application (Java Swing / AWT + JDBC + MySQL). The software streamlines university recruitment operations, student registrations, corporate recruiter job drives, eligibility filtering, application review workflows, interview scheduling, and placement reports with a high-performance offline/LAN desktop interface.
 
 ---
 
 ## Key Highlights
 
-- **Role-Based Access Control (RBAC)**: Dedicated dashboards and authenticated portals for Students, Corporate Recruiters/Companies, and Placement Cell Administrators.
-- **Automated Eligibility Filtering**: Algorithmic evaluation matching student CGPA, backlogs, department, and graduation year directly against job drive criteria.
-- **Application & Interview Tracking**: Real-time status pipeline tracking applications from submitted, shortlisted, and assessment, to technical interviews and offer rollouts.
-- **Relational Data Architecture**: Robust normalized schema managing students, companies, job listings, applications, drive schedules, and placement offers.
-- **Cloud-Native CI/CD Pipeline**: Automated DevSecOps pipeline with vulnerability audits (`pip-audit`), Docker image compilation, ECR registry publishing, S3 frontend hosting, and automated EC2 deployment via AWS Systems Manager (SSM).
+- **Role-Based Desktop Dashboards**: Dedicated UI control panels for Students, Corporate Recruiters/Companies, and Placement Cell Administrators.
+- **Automated Eligibility Engine**: Instant desktop validation checking student CGPA, backlogs, department, and graduation year against active job drive criteria.
+- **Application & Interview Lifecycle**: Complete workflow tracking student applications from submission, shortlisting, written assessments, technical interviews, to final offers.
+- **Relational Data Architecture**: Normalized MySQL relational schema accessed through robust JDBC Connection Pooling and prepared statements.
+- **Native Desktop Performance**: Responsive UI layout management with Java Swing, custom table models, report generation, and direct database persistence.
 
 ---
 
 ## Architecture & Tech Stack
 
-### Backend
-- **Framework**: Python 3, Flask 3.1
-- **Database Driver**: Flask-MySQLdb, PyMySQL, mysqlclient
-- **Security & Authentication**: Werkzeug password hashing, CORS middleware (`flask-cors`)
-- **Environment Management**: Python-dotenv
-- **Containerization**: Docker (Python 3.10 slim base)
+### Desktop Application Layer
+- **Language**: Java (JDK 17 / 21)
+- **GUI Framework**: Java Swing & Abstract Window Toolkit (AWT)
+- **Look & Feel**: System Native Look & Feel / FlatLaf
+- **Components**: `JFrame`, `JPanel`, `JTable`, `CardLayout`, `GridBagLayout`, Custom Renderers & Listeners
 
-### Database
-- **Engine**: MySQL 8.0
-- **Schema**: Relational tables for users, students, companies, jobs, applications, and placement statistics
-
-### Frontend
-- **Interface**: Responsive multi-role web interface (Student, Company, Admin dashboards)
-- **Styling**: Modular CSS design system
-- **Client Logic**: Vanilla JavaScript asynchronous REST API consumption
-
-### Cloud Infrastructure & DevSecOps
-- **Security Scanning**: `pip-audit` automated dependency vulnerability scanner
-- **Container Registry**: Amazon ECR (Elastic Container Registry)
-- **Application Hosting**: Amazon EC2 with containerized systemd/shell deployments
-- **Static Hosting**: Amazon S3 static website hosting
-- **CI/CD Pipeline**: AWS CodeBuild configured via `buildspec.yml`
+### Data Access & Persistence Layer
+- **Database Engine**: MySQL 8.0
+- **Connectivity**: Java Database Connectivity (JDBC) via MySQL Connector/J
+- **Security**: PreparedStatement SQL injection defense, BCrypt / salted password hashing
+- **Transaction Management**: ACID compliant JDBC transaction isolation
 
 ---
 
@@ -51,29 +40,37 @@ A full-stack, enterprise-grade College Placement Management System (CPMS) engine
 
 ```bash
 college-placement-management-system/
-├── backend/
-│   ├── app.py                 # Core Flask application, REST endpoints & MySQL queries
-│   ├── Dockerfile             # Multi-stage container definition
-│   ├── requirements.txt       # Python dependency specifications
-│   └── .dockerignore
+├── src/
+│   ├── com/placement/
+│   │   ├── main/
+│   │   │   └── MainApplication.java       # Desktop application launcher & GUI initialization
+│   │   ├── config/
+│   │   │   └── DatabaseConnection.java    # JDBC connection factory & credentials loader
+│   │   ├── dao/
+│   │   │   ├── StudentDAO.java            # Student CRUD and eligibility queries
+│   │   │   ├── CompanyDAO.java            # Recruiter & job drive data access
+│   │   │   ├── ApplicationDAO.java        # Placement application workflow persistence
+│   │   │   └── AdminDAO.java              # Administrative metrics & reporting queries
+│   │   ├── models/
+│   │   │   ├── Student.java               # Student academic record entity
+│   │   │   ├── Company.java               # Recruiter company entity
+│   │   │   ├── Job.java                   # Recruitment drive vacancy entity
+│   │   │   └── Application.java           # Job application state entity
+│   │   ├── views/
+│   │   │   ├── LoginFrame.java            # Multi-role authentication desktop window
+│   │   │   ├── StudentDashboard.java      # Student job drive portal & status tracker
+│   │   │   ├── CompanyDashboard.java      # Recruiter drive management & applicant review
+│   │   │   └── AdminDashboard.java        # Placement cell administration & statistics
+│   │   └── utils/
+│   │       ├── ValidationUtils.java       # Form & eligibility validation helpers
+│   │       └── TableModelHelper.java      # Dynamic JTable data bindings
 │
-├── frontend/
-│   ├── index.html             # Landing page
-│   ├── student-login.html     # Student authentication portal
-│   ├── student-signup.html    # Student registration & academic profile setup
-│   ├── student-dashboard.html # Job application portal, eligibility view & status tracker
-│   ├── company-login.html     # Recruiter login
-│   ├── company-signup.html    # Company profile & verification
-│   ├── company-dashboard.html # Post job drives, review applicants & schedule rounds
-│   ├── admin-dashboard.html   # Placement officer analytics, student approvals & drive oversight
-│   ├── css/                   # Stylesheets
-│   └── js/                    # Client-side API request controllers
-│
+├── lib/                                   # External dependencies (MySQL Connector/J JAR)
 ├── database/
-│   └── schema.sql             # MySQL schema definitions and relational constraints
-│
-├── docs/                      # Architectural diagrams and documentation
-├── buildspec.yml              # AWS CodeBuild automated pipeline definition
+│   └── schema.sql                         # MySQL schema definitions and relational constraints
+├── resources/
+│   ├── db.properties                      # Database credentials and configuration
+│   └── images/                            # Desktop application icons and graphics
 └── README.md
 ```
 
@@ -81,25 +78,25 @@ college-placement-management-system/
 
 ## Database Architecture
 
-The core relational database model includes:
-- **`students`**: Academic credentials, CGPA, department, roll number, contact details, resume links.
-- **`companies`**: Organization details, industry domain, HR contact, verification status.
-- **`jobs`**: Job roles, salary packages (CTC), eligibility criteria (min CGPA, allowed departments, max backlogs), deadlines.
-- **`applications`**: Student-to-job mappings with dynamic application states (Applied, Shortlisted, Interview Scheduled, Selected, Rejected).
-- **`admins`**: Central administrative accounts overseeing placement records and reporting.
+The MySQL database schema contains:
+- **`students`**: Academic credentials, CGPA, department, roll number, contact details, resume path.
+- **`companies`**: Organization name, industry sector, HR contact, credentials, verification state.
+- **`jobs`**: Job postings, salary package (CTC), eligibility criteria (min CGPA, allowed departments, max backlogs), deadlines.
+- **`applications`**: Student-to-job mappings with dynamic status states (Applied, Shortlisted, Interview Scheduled, Selected, Rejected).
+- **`admins`**: Administrative credentials overseeing placement records and batch reporting.
 
 ---
 
 ## Getting Started
 
 ### 1. Prerequisites
-- **Python** (v3.10 or higher)
-- **MySQL Server** (v8.0 or higher)
-- **Docker** (optional, for containerized run)
+- **Java Development Kit (JDK)**: Version 17 or higher
+- **MySQL Server**: Version 8.0 or higher
+- **MySQL Connector/J**: JDBC Driver JAR file
 
 ### 2. Database Setup
 
-Log in to your MySQL terminal and run:
+Open your MySQL client and initialize the database:
 
 ```sql
 CREATE DATABASE placement_db;
@@ -107,87 +104,43 @@ USE placement_db;
 SOURCE database/schema.sql;
 ```
 
-### 3. Backend Setup
+Configure your credentials in `resources/db.properties`:
+
+```properties
+db.url=jdbc:mysql://localhost:3306/placement_db?useSSL=false&serverTimezone=UTC
+db.user=root
+db.password=your_mysql_password
+```
+
+### 3. Compilation & Execution
+
+#### Option A: Command Line (javac / java)
+Compile the Java source files with the MySQL JDBC driver:
 
 ```bash
-cd backend
-python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
+# Compile all source files
+javac -cp "lib/*;." -d bin src/com/placement/**/*.java
 
-pip install -r requirements.txt
+# Launch the Desktop Application
+java -cp "bin;lib/*;resources" com.placement.main.MainApplication
 ```
 
-Create a `.env` file inside `backend/`:
-
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=placement_db
-SECRET_KEY=your_secret_key
-PORT=5000
-```
-
-Start the Flask application:
-
-```bash
-python app.py
-```
-> API runs on `http://localhost:5000`.
-
-### 4. Running with Docker
-
-```bash
-cd backend
-docker build -t college-placement-backend .
-docker run -d -p 5000:5000 --env-file .env college-placement-backend
-```
-
-### 5. Frontend Access
-
-Open `frontend/index.html` in a web browser or serve it using any HTTP server:
-
-```bash
-cd frontend
-python -m http.server 3000
-```
-> Access the interface at `http://localhost:3000`.
+#### Option B: In an IDE (Eclipse, IntelliJ IDEA, or NetBeans)
+1. Open the project folder in your preferred Java IDE.
+2. Ensure Project SDK is set to **JDK 17+**.
+3. Add `mysql-connector-j.jar` to Project Libraries / Classpath.
+4. Run `MainApplication.java` to start the desktop interface.
 
 ---
 
-## AWS CI/CD Pipeline Workflow
+## Core Desktop Application Modules
 
-The repository includes a production-grade `buildspec.yml` pipeline:
-
-1. **Pre-Build (DevSecOps Audit)**:
-   - Installs and executes `pip-audit` to detect vulnerable packages.
-   - Authenticates Docker client against Amazon ECR.
-2. **Build (Packaging & Static Sync)**:
-   - Compiles backend Docker image and tags it for ECR.
-   - Synchronizes frontend assets directly to Amazon S3 bucket (`aws s3 sync frontend s3://... --delete`).
-3. **Post-Build (Deploy)**:
-   - Pushes Docker container to Amazon ECR.
-   - Triggers remote zero-downtime deployment script on Amazon EC2 via AWS Systems Manager (`aws ssm send-command`).
-
----
-
-## API Endpoints Overview
-
-| Method | Endpoint | Description | Role |
+| Module | Interface | Description | Target User |
 |---|---|---|---|
-| POST | `/api/student/signup` | Register new student profile | Student |
-| POST | `/api/student/login` | Authenticate student | Student |
-| GET | `/api/student/jobs` | Retrieve eligible job drives | Student |
-| POST | `/api/student/apply` | Apply for open job vacancy | Student |
-| POST | `/api/company/signup` | Register recruiter profile | Company |
-| POST | `/api/company/login` | Authenticate company | Company |
-| POST | `/api/company/post-job` | Create new recruitment drive | Company |
-| GET | `/api/company/applicants/<job_id>` | View applicants for drive | Company |
-| POST | `/api/company/update-status` | Update applicant hiring stage | Company |
-| GET | `/api/admin/analytics` | Overview placement rates & packages | Admin |
+| Authentication | `LoginFrame` | Multi-role credential verification and registration dialog | All Users |
+| Student Portal | `StudentDashboard` | View eligible drives, apply with one click, track application status | Students |
+| Recruiter Portal | `CompanyDashboard` | Post new vacancy drives, review applicants, update selection stages | Recruiters |
+| Admin Control Panel | `AdminDashboard` | Monitor placement statistics, approve drives, export placement reports | Placement Cell |
 
 ---
 
